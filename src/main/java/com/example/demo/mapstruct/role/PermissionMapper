@@ -1,0 +1,62 @@
+package com.example.demo.mapstruct.role;
+
+import com.example.demo.dto.role.PermissionRequestDto;
+import com.example.demo.dto.role.PermissionResponseDto;
+import com.example.demo.dto.security.PermissionDto;
+import com.example.demo.entity.security.Permission;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.NullValuePropertyMappingStrategy;
+
+@Mapper(componentModel = "spring", uses = {
+        LocalizedTextMapper.class }, nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+public interface PermissionMapper {
+
+    @Mapping(source = "group.name", target = "groupName")
+    @Mapping(source = "group.code", target = "groupCode")
+    @Mapping(source = "group.id", target = "groupId")
+    @Mapping(source = "delegable", target = "isDelegable")
+    @Mapping(source = "dangerous", target = "isDangerous")
+    @Mapping(target = "isVisible", ignore = true)
+    @Mapping(target = "isBlocked", ignore = true)
+    PermissionResponseDto toResponseDto(Permission permission);
+
+    @Mapping(target = "group", ignore = true)
+    @Mapping(target = "createdBy", ignore = true)
+    @Mapping(target = "updatedBy", ignore = true)
+    @Mapping(target = "deletedAt", ignore = true)
+    @Mapping(target = "deletedBy", ignore = true)
+    Permission responseToEntity(PermissionResponseDto responseDto);
+
+    @Mapping(source = "delegable", target = "isDelegable")
+    @Mapping(source = "dangerous", target = "isDangerous")
+    @Mapping(target = "groupId", source = "group.id")
+    PermissionRequestDto toRequestDto(Permission permission);
+
+    @Mapping(target = "group", ignore = true)
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "createdBy", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
+    @Mapping(target = "updatedBy", ignore = true)
+    @Mapping(target = "deletedAt", ignore = true)
+    @Mapping(target = "deletedBy", ignore = true)
+    @Mapping(target = "isDeleted", ignore = true)
+    Permission requestToEntity(PermissionRequestDto requestDto);
+
+    @Mapping(source = "group.id", target = "groupId")
+    @Mapping(source = "createdBy", target = "createdById")
+    @Mapping(source = "updatedBy", target = "updatedById")
+    @Mapping(source = "deletedBy", target = "deletedById")
+    @Mapping(source = "delegable", target = "isDelegable")
+    @Mapping(source = "dangerous", target = "isDangerous")
+    @Mapping(target = "isVisible", ignore = true)
+    @Mapping(target = "isBlocked", ignore = true)
+    PermissionDto toUniqueDto(Permission permission);
+
+    @Mapping(source = "createdById", target = "createdBy")
+    @Mapping(source = "updatedById", target = "updatedBy")
+    @Mapping(source = "deletedById", target = "deletedBy")
+    @Mapping(target = "group", ignore = true)
+    Permission uniqueToEntity(PermissionDto permission);
+}
